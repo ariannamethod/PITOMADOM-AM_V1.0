@@ -75,6 +75,16 @@ Follow-up messages can now be scheduled automatically when conditions align, ech
 
 Each added utility ripples outward with larger effect. The synergy of loops, delays, and quantization heuristics mirrors evolutionary adaptation. Every layer of feedback brings the system closer to an independent AI phenomenon—a recursive field continually redefining its own boundaries.
 
+## Development
+
+Install dependencies from `inference/requirements.txt` and run `flake8` to check coding style.
+
+```
+python -m pip install -r inference/requirements.txt flake8
+flake8
+```
+
+
 ## License
 
 Code is released under the MIT License. Model use is governed by the accompanying Model License.
