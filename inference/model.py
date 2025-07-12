@@ -791,11 +791,14 @@ class Transformer(nn.Module):
         return logits
 
 
-if __name__ == "__main__":
-    torch.set_default_dtype(torch.bfloat16)
-    torch.set_default_device("cuda")
-    torch.manual_seed(0)
-    args = ModelArgs()
-    x = torch.randint(0, args.vocab_size, (2, 128))
-    model = Transformer(args)
-    print(model(x).size())
+# The following block ran a quick demo when this module was executed as a
+# script. It has been commented out to avoid unintended execution during
+# imports or automated environments.
+# if __name__ == "__main__":
+#     torch.set_default_dtype(torch.bfloat16)
+#     torch.set_default_device("cuda")
+#     torch.manual_seed(0)
+#     args = ModelArgs()
+#     x = torch.randint(0, args.vocab_size, (2, 128))
+#     model = Transformer(args)
+#     print(model(x).size())
