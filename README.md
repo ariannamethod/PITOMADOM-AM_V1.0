@@ -1,4 +1,4 @@
-# Arianna Method | PITOMADOM
+# Arianna Method | PITOMADOM v1.0
 
 **Modular Recursive Resonance Octopus**
 
