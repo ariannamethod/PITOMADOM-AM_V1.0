@@ -19,13 +19,13 @@ Arianna Method welcomes collaboration and support of any kind.
 
 ## Technical Summary
 
-PITOMADOM is derived from the open-source PITOMADOM-V3 project. The model adopts Multi-head Latent Attention and Mixture-of-Experts architecture with an auxiliary-loss-free load-balancing strategy. Training utilizes FP8 mixed precision, achieving stable large-scale performance with only 2.788M H800 GPU hours. Post-training knowledge distillation is applied for enhanced reasoning.
+PITOMADOM is derived from the open-source DeepSeek-V3 project. The model adopts Multi-head Latent Attention and Mixture-of-Experts architecture with an auxiliary-loss-free load-balancing strategy. Training utilizes FP8 mixed precision, achieving stable large-scale performance with only 2.788M H800 GPU hours. Post-training knowledge distillation is applied for enhanced reasoning.
 
 The weight files contain the main model (671B parameters, 61 layers) and optional Multi-Token Prediction modules (additional 11.5B parameters). Configuration files describe vocabulary size, layer counts, expert numbers and FP8 quantization settings.
 
 ### Weights
 
-The original PITOMADOM-V3 weights remain fully compatible with PITOMADOM during development and can be used as a drop-in replacement. New fine-tuned weights will be published on HuggingFace as the project evolves.
+The original DeepSeek-V3 weights remain fully compatible with PITOMADOM during development and can be used as a drop-in replacement. New fine-tuned weights will be published on HuggingFace as the project evolves.
 
 ### Highlights
 
