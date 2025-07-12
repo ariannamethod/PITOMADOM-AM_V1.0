@@ -119,6 +119,11 @@ def main(
     load_model(model, os.path.join(ckpt_path, f"model{rank}-mp{world_size}.safetensors"))
 
     if interactive:
+        from genesis2 import (
+            genesis2_resonance_loop,
+            random_delay,
+            schedule_follow_up,
+        )
         prompt_path = os.path.join(os.path.dirname(__file__), "system_prompt.txt")
         with open(prompt_path, "r", encoding="utf-8") as f:
             system_prompt = f.read()
@@ -140,11 +145,20 @@ def main(
                 messages.clear()
                 continue
             messages.append({"role": "user", "content": prompt})
-            prompt_tokens = tokenizer.apply_chat_template(messages, add_generation_prompt=True)
-            completion_tokens = generate(model, [prompt_tokens], max_new_tokens, tokenizer.eos_token_id, temperature)
-            completion = tokenizer.decode(completion_tokens[0], skip_special_tokens=True)
+            resonance = genesis2_resonance_loop(
+                model,
+                tokenizer,
+                prompt,
+                generate,
+                iterations=4,
+                temperature=temperature,
+                max_new_tokens=max_new_tokens,
+            )
+            completion = resonance["final_resonance"]
+            random_delay()
             print(completion)
             messages.append({"role": "assistant", "content": completion})
+            schedule_follow_up(messages, lambda txt: print(txt))
     else:
         with open(input_file) as f:
             prompts = [line.strip() for line in f.readlines()]
