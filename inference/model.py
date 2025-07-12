@@ -61,7 +61,6 @@ class ModelArgs:
     n_layers: int = 27
     n_dense_layers: int = 1
     n_heads: int = 16
-    # moe
     n_routed_experts: int = 64
     n_shared_experts: int = 2
     n_activated_experts: int = 6
@@ -69,13 +68,11 @@ class ModelArgs:
     n_limited_groups: int = 1
     score_func: Literal["softmax", "sigmoid"] = "softmax"
     route_scale: float = 1.
-    # mla
     q_lora_rank: int = 0
     kv_lora_rank: int = 512
     qk_nope_head_dim: int = 128
     qk_rope_head_dim: int = 64
     v_head_dim: int = 128
-    # yarn
     original_seq_len: int = 4096
     rope_theta: float = 10000.0
     rope_factor: float = 40
