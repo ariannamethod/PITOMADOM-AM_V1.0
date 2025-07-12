@@ -1,7 +1,10 @@
 import random
 import time
-import threading
 from typing import Callable, Dict, List
+from concurrent.futures import ThreadPoolExecutor
+
+# Thread pool for scheduling follow-up tasks.
+_executor = ThreadPoolExecutor(max_workers=4)
 
 import torch
 from transformers import AutoTokenizer
@@ -78,8 +81,9 @@ def schedule_follow_up(
 
     def worker():
         time.sleep(delay)
-        follow_up = f"I thought again about our discussion: '{last}'. Here is an additional thought."
+        follow_up = (
+            f"I thought again about our discussion: '{last}'. Here is an additional thought."
+        )
         callback(follow_up)
 
-    thread = threading.Thread(target=worker, daemon=True)
-    thread.start()
+    _executor.submit(worker)
