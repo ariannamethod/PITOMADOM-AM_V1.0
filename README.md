@@ -87,12 +87,13 @@ Each added utility ripples outward with larger effect. The synergy of loops, del
 
 ## Development
 
-Install dependencies from `inference/requirements.txt` and `requirements-dev.txt`, then run `flake8` to check coding style.
+Install dependencies from `inference/requirements.txt` and `requirements-dev.txt`, then run `flake8` and `pytest`.
 
 ```
 python -m pip install -r inference/requirements.txt
 python -m pip install -r requirements-dev.txt
 flake8
+pytest
 ```
 
 
