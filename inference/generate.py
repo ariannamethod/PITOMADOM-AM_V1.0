@@ -112,7 +112,7 @@ def main(
     with open(config) as f:
         args = ModelArgs(**json.load(f))
     print(args)
-    with torch.device("cuda"):
+    with torch.cuda.device(local_rank):
         model = Transformer(args)
     load_model(model, os.path.join(ckpt_path, f"model{rank}-mp{world_size}.safetensors"))
     tokenizer = AutoTokenizer.from_pretrained(ckpt_path)
