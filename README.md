@@ -97,4 +97,4 @@ flake8
 
 ## License
 
-Code is released under the MIT License. Model use is governed by the accompanying Model License.
+Code is released under the MIT License. Model use is governed by the accompanying Model License (see LICENSE-MODEL).
