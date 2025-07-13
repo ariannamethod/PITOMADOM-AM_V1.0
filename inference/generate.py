@@ -122,42 +122,47 @@ def main(
             genesis2_resonance_loop,
             random_delay,
             schedule_follow_up,
+            shutdown_executor,
         )
         prompt_path = os.path.join(os.path.dirname(__file__), "system_prompt.txt")
         with open(prompt_path, "r", encoding="utf-8") as f:
             system_prompt = f.read()
         messages = [{"role": "system", "content": system_prompt}]
-        while True:
-            if world_size == 1:
-                prompt = input(">>> ")
-            elif rank == 0:
-                prompt = input(">>> ")
-                objects = [prompt]
-                dist.broadcast_object_list(objects, 0)
-            else:
-                objects = [None]
-                dist.broadcast_object_list(objects, 0)
-                prompt = objects[0]
-            if prompt == "/exit":
-                break
-            elif prompt == "/clear":
-                messages.clear()
-                continue
-            messages.append({"role": "user", "content": prompt})
-            resonance = genesis2_resonance_loop(
-                model,
-                tokenizer,
-                prompt,
-                generate,
-                iterations=4,
-                temperature=temperature,
-                max_new_tokens=max_new_tokens,
-            )
-            completion = resonance["final_resonance"]
-            random_delay()
-            print(completion)
-            messages.append({"role": "assistant", "content": completion})
-            schedule_follow_up(messages, lambda txt: print(txt))
+        try:
+            while True:
+                if world_size == 1:
+                    prompt = input(">>> ")
+                elif rank == 0:
+                    prompt = input(">>> ")
+                    objects = [prompt]
+                    dist.broadcast_object_list(objects, 0)
+                else:
+                    objects = [None]
+                    dist.broadcast_object_list(objects, 0)
+                    prompt = objects[0]
+                if prompt == "/exit":
+                    break
+                elif prompt == "/clear":
+                    messages.clear()
+                    continue
+                messages.append({"role": "user", "content": prompt})
+                resonance = genesis2_resonance_loop(
+                    model,
+                    tokenizer,
+                    prompt,
+                    generate,
+                    iterations=4,
+                    temperature=temperature,
+                    max_new_tokens=max_new_tokens,
+                )
+                completion = resonance["final_resonance"]
+                random_delay()
+                print(completion)
+                messages.append({"role": "assistant", "content": completion})
+                schedule_follow_up(messages, lambda txt: print(txt))
+        finally:
+            # Ensure background threads terminate when interactive mode ends
+            shutdown_executor()
     else:
         with open(input_file) as f:
             prompts = [line.strip() for line in f.readlines()]
