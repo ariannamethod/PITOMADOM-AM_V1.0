@@ -87,3 +87,8 @@ def schedule_follow_up(
         callback(follow_up)
 
     _executor.submit(worker)
+
+
+def shutdown_executor() -> None:
+    """Cleanly shut down the shared ``ThreadPoolExecutor``."""
+    _executor.shutdown(wait=True)

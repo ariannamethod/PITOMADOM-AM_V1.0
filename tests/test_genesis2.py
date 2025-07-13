@@ -99,3 +99,15 @@ def test_random_delay(monkeypatch):
     monkeypatch.setattr(genesis2, "time", types.SimpleNamespace(sleep=lambda x: called.append(x)))
     genesis2.random_delay(min_seconds=1, max_seconds=5)
     assert called == [1]
+
+
+def test_shutdown_executor(monkeypatch):
+    calls = []
+
+    class DummyExecutor:
+        def shutdown(self, wait=True):
+            calls.append(wait)
+
+    monkeypatch.setattr(genesis2, "_executor", DummyExecutor())
+    genesis2.shutdown_executor()
+    assert calls == [True]
