@@ -103,7 +103,7 @@ def test_random_delay(monkeypatch, genesis2):
     assert called == [1]
 
 
-def test_shutdown_executor(monkeypatch):
+def test_shutdown_executor(monkeypatch, genesis2):
     calls = []
 
     class DummyExecutor:
