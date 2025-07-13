@@ -99,3 +99,38 @@ def test_random_delay(monkeypatch):
     monkeypatch.setattr(genesis2, "time", types.SimpleNamespace(sleep=lambda x: called.append(x)))
     genesis2.random_delay(min_seconds=1, max_seconds=5)
     assert called == [1]
+
+
+def test_schedule_follow_up_runs(monkeypatch):
+    """Callback should run when random.random() is below probability."""
+    history = [{"role": "user", "content": "hello"}]
+    messages = []
+
+    def cb(msg):
+        messages.append(msg)
+
+    dummy_exec = types.SimpleNamespace(submit=lambda fn: fn())
+    monkeypatch.setattr(genesis2, "_executor", dummy_exec)
+    monkeypatch.setattr(genesis2.random, "random", lambda: 0.0)
+    monkeypatch.setattr(genesis2.random, "randint", lambda a, b: 2)
+    slept = []
+    monkeypatch.setattr(genesis2, "time", types.SimpleNamespace(sleep=lambda d: slept.append(d)))
+
+    genesis2.schedule_follow_up(history, cb, probability=0.5, min_delay=1, max_delay=3)
+
+    assert messages == ["I thought again about our discussion: 'hello'. Here is an additional thought."]
+    assert slept == [2]
+
+
+def test_schedule_follow_up_skips(monkeypatch):
+    """Callback should not run when random.random() exceeds probability."""
+    history = [{"role": "user", "content": "skip"}]
+    called = []
+
+    dummy_exec = types.SimpleNamespace(submit=lambda fn: called.append("submit"))
+    monkeypatch.setattr(genesis2, "_executor", dummy_exec)
+    monkeypatch.setattr(genesis2.random, "random", lambda: 0.9)
+
+    genesis2.schedule_follow_up(history, lambda msg: called.append(msg), probability=0.1)
+
+    assert called == []
