@@ -1,8 +1,6 @@
-import os
 import sys
 import types
-
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+import pytest
 
 # Stub torch and transformers modules before importing genesis2
 torch_stub = types.ModuleType("torch")
@@ -25,7 +23,11 @@ model_stub = types.ModuleType("model")
 model_stub.Transformer = type("Transformer", (), {})
 sys.modules.setdefault("model", model_stub)
 
-from inference import genesis2
+
+@pytest.fixture
+def genesis2(add_project_root):
+    from inference import genesis2 as genesis2_module
+    return genesis2_module
 
 class DummyTorch:
     @staticmethod
@@ -73,7 +75,7 @@ class DummyEmbedding(list):
     def mean(self, dim=0):
         return sum(self) / len(self)
 
-def test_genesis2_resonance_loop(monkeypatch):
+def test_genesis2_resonance_loop(monkeypatch, genesis2):
     tokenizer = DummyTokenizer()
     model = DummyModel()
     monkeypatch.setattr(genesis2, "torch", DummyTorch)
@@ -93,7 +95,7 @@ def test_genesis2_resonance_loop(monkeypatch):
     assert result["final_resonance"] == "echo"
     assert result["evolution"] == 1.0
 
-def test_random_delay(monkeypatch):
+def test_random_delay(monkeypatch, genesis2):
     called = []
     monkeypatch.setattr(genesis2.random, "randint", lambda a, b: 1)
     monkeypatch.setattr(genesis2, "time", types.SimpleNamespace(sleep=lambda x: called.append(x)))
