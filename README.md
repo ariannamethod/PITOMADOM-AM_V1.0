@@ -108,4 +108,4 @@ pytest
 
 ## License
 
-Code is released under the MIT License. Model use is governed by the accompanying Model License (see LICENSE-MODEL).
+Code is released under the Apache License 2.0. Model use is governed by the accompanying Model License (see LICENSE-MODEL).
